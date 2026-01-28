@@ -15,21 +15,36 @@ let settingsWindow: BrowserWindow | null = null
  * @returns NativeImage for the icon
  */
 function createTrayIcon(isTranslating: boolean = false): Electron.NativeImage {
-  // Load icon from resources directory
+  // Try to load icon from resources directory
   const isDev = !app.isPackaged
   const iconPath = isDev
     ? path.join(process.cwd(), 'resources', 'icon.png')
     : path.join(process.resourcesPath, 'resources', 'icon.png')
 
+  console.log('Icon path:', iconPath)
+
   let icon = nativeImage.createFromPath(iconPath)
 
-  // Resize to appropriate size for menu bar (16x16 for normal, 32x32 for Retina)
-  icon = icon.resize({ width: 16, height: 16 })
+  // If icon failed to load or is empty, create a fallback icon
+  if (icon.isEmpty()) {
+    console.warn('Icon not found, using fallback')
+    // Create a simple fallback icon using text
+    const size = 16
+    const text = isTranslating ? '○' : 'T'
 
-  // If translating, overlay a small indicator
-  if (isTranslating) {
-    // Add a small overlay or modify the icon to show it's translating
-    // For now, we'll use the same icon but could add an overlay in the future
+    // Create a simple black and white icon for template
+    const canvas = `
+      <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
+        <text x="${size/2}" y="${size - 2}" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="black">${text}</text>
+      </svg>
+    `.trim()
+
+    icon = nativeImage.createFromDataURL(
+      'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(canvas)
+    )
+  } else {
+    // Resize loaded icon to appropriate size for menu bar
+    icon = icon.resize({ width: 16, height: 16 })
   }
 
   // Template images automatically adapt to light/dark mode on macOS

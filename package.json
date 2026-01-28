@@ -44,8 +44,19 @@
       "output": "dist"
     },
     "files": [
-      "out/**/*",
-      "resources/**/*"
+      "out/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "resources",
+        "to": "resources",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "scripts",
+        "to": "scripts",
+        "filter": ["**/*"]
+      }
     ],
     "mac": {
       "target": ["dmg", "zip"],
