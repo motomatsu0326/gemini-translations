@@ -66,15 +66,13 @@ npm run typecheck
 
 ## 配布
 
-### DMGファイルの作成
+### 署名済みZIPの作成
 
 ```bash
-npm run dist:dmg
+npm run dist
 ```
 
-生成されるファイル:
-- `dist/Gemini Translation-1.0.0.dmg` - インストーラー
-- `dist/Gemini Translation-1.0.0-mac.zip` - ZIPアーカイブ
+生成されるファイル: `dist/mac-arm64/Gemini Translation.zip`
 
 ## 使い方
 

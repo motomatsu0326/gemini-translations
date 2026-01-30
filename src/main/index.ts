@@ -201,8 +201,10 @@ app.on('window-all-closed', () => {
 
 // Clean up before quit
 app.on('will-quit', () => {
-  unregisterAllShortcuts()
-  destroyStatusWindow()
+  if (app.isReady()) {
+    unregisterAllShortcuts()
+    destroyStatusWindow()
+  }
 })
 
 // macOS specific: Don't show in Dock
